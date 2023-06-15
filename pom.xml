@@ -88,6 +88,8 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>**/*.feature</include>
+					<include>**/*.properties</include>
+					<include>**/*.yml</include>
 				</includes>
 			</resource>
 			<!-- Additional resource configurations -->

@@ -33,4 +33,24 @@ public class TicketService {
     public Optional<Ticket> findById(String id) {
         return ticketRepository.findById(id);
     }
+
+    public Ticket setPriority(String id, Ticket.Prioridad priority) {
+        Optional<Ticket> opTicket = ticketRepository.findById(id);
+        Ticket ticket = opTicket.get();
+        if (opTicket.isPresent()) {
+            ticket.setPrioridad(priority);
+            ticketRepository.save(ticket);
+        }
+        return ticket;
+    }
+
+    public Ticket setSeverity(String id, Ticket.Severidad severity) {
+        Optional<Ticket> opTicket = ticketRepository.findById(id);
+        Ticket ticket = opTicket.get();
+        if (opTicket.isPresent()) {
+            ticket.setSeveridad(severity);
+            ticketRepository.save(ticket);
+        }
+        return ticket;
+    }
 }

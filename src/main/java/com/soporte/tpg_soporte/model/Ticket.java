@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "tickets")
 public class Ticket {
+
     public enum Severidad {S1, S2, S3, S4};
     public enum Prioridad {ALTA, MEDIA, BAJA};
     public enum Estado {PENDIENTE, EMPEZADO, RESUELTO};

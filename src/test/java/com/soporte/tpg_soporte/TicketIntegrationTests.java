@@ -1,10 +1,14 @@
 package com.soporte.tpg_soporte;
 
+import com.soporte.tpg_soporte.model.Ticket;
+import com.soporte.tpg_soporte.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-@ContextConfiguration(classes = Memo1BankApp.class)
+import java.util.Date;
+
+@ContextConfiguration(classes = TpgSoporteApplication.class)
 @WebAppConfiguration
 public class TicketIntegrationTests {
 
@@ -12,36 +16,15 @@ public class TicketIntegrationTests {
     TicketService ticketService;
 
 
-    Ticket createTicket(String product, String version, String modifications, String client, int severity, int priority) {
-        return ticketService.createTicket(new Ticket(client, product, version, modifications, client, severity, priority));
+    Ticket createTicket(String codigo, String titulo, Ticket.Severidad severidad, Ticket.Prioridad prioridad, Ticket.Estado estado, String description, Date sla, Date fechaCreacion, Long cliente, Long producto) {
+        return ticketService.createTicket(new Ticket(codigo, titulo, severidad, prioridad, estado, description, sla, fechaCreacion, cliente, producto));
     }
 
-    Ticket changePriority(Ticket ticket, int priority) {
-        return ticketService.setPriority(ticket.getId(), priority);
+    Ticket changePriority(Ticket ticket, Ticket.Prioridad priority) {
+        return ticketService.setPriority(ticket.getCodigo(), priority);
     }
 
-    Ticket changeSeverity(Ticket ticket, int severity) {return ticketService.setSeverity(ticket.getId(), severity);}
+    Ticket changeSeverity(Ticket ticket, Ticket.Severidad severity) {return ticketService.setSeverity(ticket.getCodigo(), severity);}
 
     //getTimeElapsed?
-}
-
-@ContextConfiguration(classes = Memo1BankApp.class)
-@WebAppConfiguration
-public class AccountIntegrationServiceTest {
-
-    @Autowired
-    AccountService accountService;
-
-    Account createAccount(Double balance) {
-        return accountService.createAccount(new Account(balance));
-    }
-
-    Account withdraw(Account account, Double sum) {
-        return accountService.withdraw(account.getCbu(), sum);
-    }
-
-    Account deposit(Account account, Double sum) {
-        return accountService.deposit(account.getCbu(), sum);
-    }
-
 }

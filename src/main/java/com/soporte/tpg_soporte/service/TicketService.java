@@ -53,4 +53,12 @@ public class TicketService {
         }
         return ticket;
     }
+
+    public Collection<Ticket> findByCliente(Long cliente) {
+        return ticketRepository.findByCliente(cliente);
+    }
+
+    public Collection<Ticket> findByProducto(Long producto) {
+        return ticketRepository.findByProducto(producto);
+    }
 }

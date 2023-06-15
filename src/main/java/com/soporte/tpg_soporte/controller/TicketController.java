@@ -52,4 +52,14 @@ public class TicketController {
     public void deleteTicket(@PathVariable String id) {
         ticketService.deleteById(id);
     }
+
+    @GetMapping("/tickets/cliente/{cliente}")
+    public Collection<Ticket> findTicketsByCliente(@PathVariable Long cliente) {
+        return ticketService.findByCliente(cliente);
+    }
+
+    @GetMapping("/tickets/producto/{producto}")
+    public Collection<Ticket> findTicketsByProducto(@PathVariable Long producto) {
+        return ticketService.findByProducto(producto);
+    }
 }

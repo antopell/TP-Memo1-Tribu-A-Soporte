@@ -1,5 +1,10 @@
 package com.soporte.tpg_soporte.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -87,7 +92,7 @@ public class TicketController {
         ticketService.deleteById(id);
     }
 
-    
+
     @Operation(summary = "Recupera los tickets en base al cliente", description = "Devuelve una lista de tickets en base al cliente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "404", description = "Cliente no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
@@ -107,5 +112,26 @@ public class TicketController {
     @GetMapping("/tickets/producto/{producto}")
     public Collection<Ticket> findTicketsByProducto(@PathVariable Long producto) {
         return ticketService.findByProducto(producto);
+    }
+
+
+    @Operation(summary = "Recupera los clientes", description = "Devuelve una lista de clientes")
+    @ApiResponse(responseCode = "200", description = "Recuperación exitosa de los clientes")
+    @GetMapping("/clientes")
+    public String getClientes() throws IOException {
+        URL url = new URL("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/clientes-psa/1.0.0/m/api/clientes");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+
+        con.connect();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        String content = "";
+        while ((inputLine = in.readLine()) != null) {
+            content += inputLine;
+        }
+        in.close();
+        con.disconnect();
+        return content;
     }
 }

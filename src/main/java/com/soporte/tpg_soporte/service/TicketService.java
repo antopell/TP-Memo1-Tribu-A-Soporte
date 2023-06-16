@@ -1,6 +1,9 @@
 package com.soporte.tpg_soporte.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,24 @@ public class TicketService {
     TicketRepository ticketRepository;
 
     public Ticket createTicket(Ticket ticket) {
+        Date date;
+        switch (ticket.getSeveridad()) {
+            case S1: 
+                date = addDays(7); 
+                break;
+            case S2: 
+                date = addDays(30); 
+                break;
+            case S3: 
+                date = addDays(90); 
+                break;
+            case S4: 
+                date = addDays(365); 
+                break;
+            default: 
+                date = addDays(365);
+        }
+        ticket.setFechaLimite(date);
         return ticketRepository.save(ticket);
     }
 
@@ -58,7 +79,12 @@ public class TicketService {
         return ticketRepository.findByCliente(cliente);
     }
 
-    public Collection<Ticket> findByProducto(Long producto) {
-        return ticketRepository.findByProducto(producto);
+    public Collection<Ticket> findByVersionProducto(Long versionProducto) {
+        return ticketRepository.findByVersionProducto(versionProducto);
+    }
+
+    public Date addDays(int days) {
+        LocalDate fechaActual = LocalDate.now();
+        return Date.from(fechaActual.plusDays(days).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

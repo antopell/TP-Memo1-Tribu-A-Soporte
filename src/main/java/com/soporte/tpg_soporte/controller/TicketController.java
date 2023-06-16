@@ -98,7 +98,7 @@ public class TicketController {
         @ApiResponse(responseCode = "404", description = "Cliente no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "200", description = "Recuperación exitosa de los tickets", content = @Content(schema = @Schema(implementation = Ticket.class))),
     })
-    @GetMapping("/tickets/cliente/{cliente}")
+    @GetMapping("/cliente/{cliente}/tickets")
     public Collection<Ticket> findTicketsByCliente(@PathVariable Long cliente) {
         return ticketService.findByCliente(cliente);
     }
@@ -109,9 +109,9 @@ public class TicketController {
         @ApiResponse(responseCode = "404", description = "Producto no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "200", description = "Recuperación exitosa de los tickets", content = @Content(schema = @Schema(implementation = Ticket.class))),
     })
-    @GetMapping("/tickets/producto/{producto}")
-    public Collection<Ticket> findTicketsByProducto(@PathVariable Long producto) {
-        return ticketService.findByProducto(producto);
+    @GetMapping("/version-producto/{versionProducto}/tickets")
+    public Collection<Ticket> findTicketsByVersionProducto(@PathVariable Long versionProducto) {
+        return ticketService.findByVersionProducto(versionProducto);
     }
 
 

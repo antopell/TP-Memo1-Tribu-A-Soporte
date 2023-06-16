@@ -14,6 +14,6 @@ public interface TicketRepository extends MongoRepository<Ticket,String>{
     @Query("{cliente:?0}")
     List<Ticket> findByCliente(Long cliente);
 
-    @Query("{producto:?0}")
-    List<Ticket> findByProducto(Long producto);
+    @Query("{versionProducto:?0}")
+    List<Ticket> findByVersionProducto(Long versionProducto);
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 @Document(collection = "tickets")
 public class Ticket {
 
@@ -19,25 +20,24 @@ public class Ticket {
     private Prioridad prioridad;
     private Estado estado;
     private String description;
-    private Date sla;
+    private Date fechaLimite;
     private Date fechaCreacion;
-
     private Long cliente;
+    private Long versionProducto;
 
-    private Long producto;
 
-
-    public Ticket(String codigo, String titulo, Severidad severidad, Prioridad prioridad, Estado estado, String description, Date sla, Date fechaCreacion, Long cliente, Long producto) {
+    public Ticket(String codigo, String titulo, Severidad severidad, Prioridad prioridad, 
+                    Estado estado, String description, Date fechaLimite, Date fechaCreacion, Long cliente, Long versionProducto) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.severidad = severidad;
         this.prioridad = prioridad;
         this.estado = estado;
         this.description = description;
-        this.sla = sla;
+        this.fechaLimite = fechaLimite;
         this.fechaCreacion = fechaCreacion;
         this.cliente = cliente;
-        this.producto = producto;
+        this.versionProducto = versionProducto;
     }
 
 
@@ -48,6 +48,7 @@ public class Ticket {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
 
     public String getTitulo() {
         return this.titulo;
@@ -89,12 +90,12 @@ public class Ticket {
         this.description = description;
     }
 
-    public Date getSla() {
-        return this.sla;
+    public Date getFechaLimite() {
+        return this.fechaLimite;
     }
 
-    public void setSla(Date sla) {
-        this.sla = sla;
+    public void setFechaLimite(Date fechaLimite) {
+        this.fechaLimite = fechaLimite;
     }
 
     public Date getFechaCreacion() {
@@ -113,12 +114,12 @@ public class Ticket {
         this.cliente = cliente;
     }
 
-    public Long getProducto() {
-        return this.producto;
+    public Long getVersionProducto() {
+        return this.versionProducto;
     }
 
-    public void setProducto(Long producto) {
-        this.producto = producto;
+    public void setVersionProducto(Long versionProducto) {
+        this.versionProducto = versionProducto;
     }
     
 

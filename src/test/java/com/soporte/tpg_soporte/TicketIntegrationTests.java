@@ -1,5 +1,8 @@
 package com.soporte.tpg_soporte;
 
+import com.soporte.tpg_soporte.exception.TicketExceptionNoClient;
+import com.soporte.tpg_soporte.exception.TicketExceptionNoProduct;
+import com.soporte.tpg_soporte.exception.TicketExceptionNoVersion;
 import com.soporte.tpg_soporte.model.Ticket;
 import com.soporte.tpg_soporte.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,7 @@ public class TicketIntegrationTests {
     TicketService ticketService;
 
 
-    Ticket createTicket(String codigo, String titulo, Ticket.Severidad severidad, Ticket.Prioridad prioridad, Ticket.Estado estado, String description, Date sla, Date fechaCreacion, Long cliente, Long producto) {
+    Ticket createTicket(String codigo, String titulo, Ticket.Severidad severidad, Ticket.Prioridad prioridad, Ticket.Estado estado, String description, Date sla, Date fechaCreacion, Long cliente, Long producto) throws TicketExceptionNoProduct, TicketExceptionNoClient, TicketExceptionNoVersion {
         return ticketService.createTicket(new Ticket(codigo, titulo, severidad, prioridad, estado, description, sla, fechaCreacion, cliente, producto));
     }
 
@@ -26,5 +29,5 @@ public class TicketIntegrationTests {
 
     Ticket changeSeverity(Ticket ticket, Ticket.Severidad severity) {return ticketService.setSeverity(ticket.getCodigo(), severity);}
 
-    //getTimeElapsed?
+
 }

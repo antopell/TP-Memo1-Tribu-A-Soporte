@@ -5,6 +5,7 @@ import com.soporte.tpg_soporte.service.TicketService;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TicketPriorityAndSeverityTests {
 
+    @Autowired
     private TicketService ticketService;
     private Ticket.Prioridad prioridad;
     private Ticket ticket;

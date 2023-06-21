@@ -1,0 +1,1 @@
+[{"codigo":0,"titulo":"Gestión académica"},{"codigo":1,"titulo":"Administración de consorcios"},{"codigo":2,"titulo":"Tienda virtual"}]

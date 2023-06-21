@@ -1,1 +1,8 @@
-com/soporte/tpg_soporte/TpgSoporteApplication.class
+com\soporte\tpg_soporte\controller\TicketController.class
+com\soporte\tpg_soporte\repository\TicketRepository.class
+com\soporte\tpg_soporte\TpgSoporteApplication.class
+com\soporte\tpg_soporte\model\Ticket$Severidad.class
+com\soporte\tpg_soporte\service\TicketService.class
+com\soporte\tpg_soporte\model\Ticket$Estado.class
+com\soporte\tpg_soporte\model\Ticket.class
+com\soporte\tpg_soporte\model\Ticket$Prioridad.class

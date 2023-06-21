@@ -1,0 +1,1 @@
+[{"codigo":0,"producto":0,"descripcion":"V-1.0"},{"codigo":1,"producto":0,"descripcion":"V-2.3"},{"codigo":2,"producto":1,"descripcion":"V-1.3"},{"codigo":3,"producto":2,"descripcion":"V-3"}]

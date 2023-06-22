@@ -1,11 +1,8 @@
 package com.soporte.tpg_soporte.controller;
 
-import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +11,6 @@ import java.util.Optional;
 import com.soporte.tpg_soporte.exception.ErrorNotFound;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,9 +18,15 @@ import com.google.gson.reflect.TypeToken;
 import com.soporte.tpg_soporte.model.Cliente;
 import com.soporte.tpg_soporte.model.Version;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.core.io.Resource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import com.soporte.tpg_soporte.exception.ErrorResponse;
 import com.soporte.tpg_soporte.model.Ticket;
@@ -119,8 +121,16 @@ public class TicketController {
     @CrossOrigin
     @GetMapping("/productos")
     public Collection<Producto> getProductos() throws IOException {
-        String filePath = "src/main/resources/productos.txt";
-        String content = Files.readString(Path.of(filePath));
+        Resource resource = new FileSystemResource("src/main/resources/productos.txt");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+
+        String line;
+        String content = "";
+        while ((line = reader.readLine()) != null) {
+            content += line;
+        }
+        reader.close();
+
         Type listType = new TypeToken<List<Producto>>() {}.getType();
         List<Producto> productos = new Gson().fromJson(content, listType);
         return productos;
@@ -134,8 +144,16 @@ public class TicketController {
     @CrossOrigin
     @GetMapping("/productos/{codigoProducto}/versiones")
     public Collection<Version> findVersionesByProducto(@PathVariable Long codigoProducto) throws IOException {
-        String filePath = "src/main/resources/versiones.txt";
-        String content = Files.readString(Path.of(filePath));
+        Resource resource = new FileSystemResource("src/main/resources/versiones.txt");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+
+        String line;
+        String content = "";
+        while ((line = reader.readLine()) != null) {
+            content += line;
+        }
+        reader.close();
+
         Type listType = new TypeToken<List<Version>>() {}.getType();
         List<Version> versiones = new Gson().fromJson(content, listType);
         List<Version> versionesProducto = new ArrayList<>();

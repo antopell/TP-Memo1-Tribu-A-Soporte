@@ -18,7 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.soporte.tpg_soporte.model.Cliente;
 import com.soporte.tpg_soporte.model.Version;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -93,10 +93,10 @@ public class TicketController {
         @ApiResponse(responseCode = "404", description = "Ticket no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
      })
     @CrossOrigin
-    @PutMapping("/tickets/{id}")
-    public ResponseEntity<?> updateTicket(@RequestBody Ticket ticket, @RequestParam String id) {
+    @PutMapping("/tickets/{codigo}")
+    public ResponseEntity<?> updateTicket(@RequestBody Ticket ticket, @RequestParam String codigo) {
         try {
-            Ticket ticket_updated = ticketService.updateTicket(id, ticket);
+            Ticket ticket_updated = ticketService.updateTicket(codigo, ticket);
             return ResponseEntity.status(HttpStatus.OK).body(ticket_updated);
         } catch(ErrorNotFound e) {
             ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
@@ -110,9 +110,9 @@ public class TicketController {
         @ApiResponse(responseCode = "404", description = "Ticket no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
      })
     @CrossOrigin
-    @DeleteMapping("/tickets/{id}")
-    public void deleteTicket(@PathVariable String id) {
-        ticketService.deleteById(id);
+    @DeleteMapping("/tickets/{codigo}")
+    public void deleteTicket(@PathVariable String codigo) {
+        ticketService.deleteById(codigo);
     }
 
 
@@ -121,7 +121,7 @@ public class TicketController {
     @CrossOrigin
     @GetMapping("/productos")
     public Collection<Producto> getProductos() throws IOException {
-        Resource resource = new FileSystemResource("src/main/resources/productos.txt");
+        Resource resource = new ClassPathResource("productos.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
 
         String line;
@@ -144,7 +144,7 @@ public class TicketController {
     @CrossOrigin
     @GetMapping("/productos/{codigoProducto}/versiones")
     public Collection<Version> findVersionesByProducto(@PathVariable Long codigoProducto) throws IOException {
-        Resource resource = new FileSystemResource("src/main/resources/versiones.txt");
+        Resource resource = new ClassPathResource("versiones.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
 
         String line;

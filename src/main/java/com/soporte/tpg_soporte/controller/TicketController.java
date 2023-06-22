@@ -8,6 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+
+import com.soporte.tpg_soporte.exception.ErrorNotFound;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -42,16 +47,21 @@ public class TicketController {
 
     @Operation(summary = "Crea un ticket", description = "Crea un ticket con su respectiva información")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Creación exitosa del ticket"),
-        @ApiResponse(responseCode = "400", description = "Bad request: envío fallido", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-     })
+            @ApiResponse(responseCode = "201", description = "Creación exitosa del ticket"),
+            @ApiResponse(responseCode = "400", description = "Bad request: envío fallido", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/tickets")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
-    public Ticket createTicket(@RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket);
+    public ResponseEntity<?> createTicket(@RequestBody Ticket ticket) {
+        try {
+            Ticket createdTicket = ticketService.createTicket(ticket);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdTicket);
+        } catch (ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
-
 
     @Operation(summary = "Recupera tickets", description = "Devuelve una lista con todos los tickets")
     @ApiResponse(responseCode = "200", description = "Recuperación exitosa de los tickets", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Ticket.class))))
@@ -82,17 +92,14 @@ public class TicketController {
      })
     @CrossOrigin
     @PutMapping("/tickets/{id}")
-    public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket ticket, @RequestParam String id) {
-        Optional<Ticket> ticketOptional = ticketService.findById(id);
-
-        if (!ticketOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateTicket(@RequestBody Ticket ticket, @RequestParam String id) {
+        try {
+            Ticket ticket_updated = ticketService.updateTicket(id, ticket);
+            return ResponseEntity.status(HttpStatus.OK).body(ticket_updated);
+        } catch(ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-
-        ticket.setCodigo(id);
-        ticketService.save(ticket);
-
-        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Elimina un ticket en base a su código", description = "Elimina un ticket en base a su código")

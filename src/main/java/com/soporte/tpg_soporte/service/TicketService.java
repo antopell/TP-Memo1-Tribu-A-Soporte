@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
+import com.soporte.tpg_soporte.exception.ErrorNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,13 @@ public class TicketService {
     TicketRepository ticketRepository;
 
     public Ticket createTicket(Ticket ticket) {
+        if (ticket.getCliente() == null) {
+            throw new ErrorNotFound("Client is required");
+        } else if (ticket.getTitulo() == null) {
+            throw new ErrorNotFound("Title is required");
+        } else if (ticket.getVersionProducto() == null) {
+            throw new ErrorNotFound("Version is required");
+        }
         Date date;
         switch (ticket.getSeveridad()) {
             case S1: 
@@ -63,6 +71,29 @@ public class TicketService {
             ticketRepository.save(ticket);
         }
         return ticket;
+    }
+    public Ticket updateTicket(String id, Ticket ticket) {
+        Optional<Ticket> opTicket = ticketRepository.findById(id);
+        if (!opTicket.isPresent()) {
+            throw new ErrorNotFound("Ticket not found");
+        }
+        Ticket existingTicket = opTicket.get();
+        if (existingTicket.getEstado() == Ticket.Estado.RESUELTO) {
+            throw new ErrorNotFound("Closed tickets can't be updated");
+        }
+        existingTicket.setCodigo(ticket.getCodigo());
+        existingTicket.setTitulo(ticket.getTitulo());
+        existingTicket.setCliente(ticket.getCliente());
+        existingTicket.setDescription(ticket.getDescription());
+        existingTicket.setPrioridad(ticket.getPrioridad());
+        existingTicket.setEstado(ticket.getEstado());
+        existingTicket.setFechaLimite(ticket.getFechaLimite());
+        existingTicket.setSeveridad(ticket.getSeveridad());
+        existingTicket.setFechaCreacion(ticket.getFechaCreacion());
+        existingTicket.setVersionProducto(ticket.getVersionProducto());
+        ticketRepository.deleteById(id);
+        ticketRepository.save(existingTicket);
+        return existingTicket;
     }
 
     public Ticket setSeverity(String id, Ticket.Severidad severity) {

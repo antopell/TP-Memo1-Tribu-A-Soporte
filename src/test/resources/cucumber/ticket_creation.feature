@@ -22,4 +22,4 @@ Feature: Ticket creation
     Given Client and version
     When Trying to create the ticket
     Then Ticket is not created
-    And Product is requested.
+    And Product is requested

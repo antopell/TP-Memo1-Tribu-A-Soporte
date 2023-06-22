@@ -17,8 +17,8 @@ FROM eclipse-temurin:17-jre-focal
 WORKDIR /app
 
 # Copy the built JAR file from the build image
-COPY ./src/main/resources/ /app/resources/
 COPY --from=build /app/target/tpg_soporte-0.0.1-SNAPSHOT.jar /app/tpg_soporte-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/resources /app/resources
 
 # Set the command to run the Spring Boot application when the container starts
 CMD ["java", "-jar", "tpg_soporte-0.0.1-SNAPSHOT.jar"]

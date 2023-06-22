@@ -3,6 +3,8 @@ package com.soporte.tpg_soporte.controller;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,8 +26,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import com.soporte.tpg_soporte.exception.ErrorResponse;
@@ -121,19 +126,12 @@ public class TicketController {
     @CrossOrigin
     @GetMapping("/productos")
     public Collection<Producto> getProductos() throws IOException {
-        Resource resource = new ClassPathResource("productos.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-
-        String line;
-        String content = "";
-        while ((line = reader.readLine()) != null) {
-            content += line;
-        }
-        reader.close();
-
+        String filePath = "/app/src/main/resources/productos.txt";
+        String content = Files.readString(Path.of(filePath));
         Type listType = new TypeToken<List<Producto>>() {}.getType();
         List<Producto> productos = new Gson().fromJson(content, listType);
         return productos;
+
     }
 
     @Operation(summary = "Recupera las versiones en base al producto", description = "Devuelve una lista de versiones en base al producto")
@@ -144,16 +142,8 @@ public class TicketController {
     @CrossOrigin
     @GetMapping("/productos/{codigoProducto}/versiones")
     public Collection<Version> findVersionesByProducto(@PathVariable Long codigoProducto) throws IOException {
-        Resource resource = new ClassPathResource("versiones.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-
-        String line;
-        String content = "";
-        while ((line = reader.readLine()) != null) {
-            content += line;
-        }
-        reader.close();
-
+        String filePath = "/app/src/main/resources/versiones.txt";
+        String content = Files.readString(Path.of(filePath));
         Type listType = new TypeToken<List<Version>>() {}.getType();
         List<Version> versiones = new Gson().fromJson(content, listType);
         List<Version> versionesProducto = new ArrayList<>();

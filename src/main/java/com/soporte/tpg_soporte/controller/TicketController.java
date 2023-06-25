@@ -94,7 +94,7 @@ public class TicketController {
 
     @Operation(summary = "Actualiza un ticket en base a su código", description = "Actualiza un ticket en base a su código")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Actualización exitosa del ticket"),
+        @ApiResponse(responseCode = "200", description = "Actualización exitosa del ticket"),
         @ApiResponse(responseCode = "404", description = "Ticket no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
      })
     @CrossOrigin

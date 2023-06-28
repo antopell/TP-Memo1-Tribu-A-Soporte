@@ -56,13 +56,12 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public Optional<Ticket> deleteById(String id) {
+    public void deleteById(String id) {
         Optional<Ticket> opTicket = ticketRepository.findById(id);
         if (!opTicket.isPresent()) {
             throw new ErrorNotFound("El ticket no fue encontrado.");
         }
         ticketRepository.deleteById(id);
-        return opTicket;
     }
 
     public Optional<Ticket> findById(String id) {
@@ -117,19 +116,11 @@ public class TicketService {
     }
 
     public Collection<Ticket> findByCliente(Long cliente) {
-        List<Ticket> ticketList = ticketRepository.findByCliente(cliente);
-        if (ticketList.isEmpty()) {
-            throw new ErrorNotFound("Cliente no encontrado.");
-        }
-        return ticketList;
+        return ticketRepository.findByCliente(cliente);
     }
 
     public Collection<Ticket> findByVersionProducto(Long versionProducto) {
-        List<Ticket> ticketList = ticketRepository.findByVersionProducto(versionProducto);
-        if (ticketList.isEmpty()) {
-            throw new ErrorNotFound("Versión no encontrada.");
-        }
-        return ticketList;
+        return  ticketRepository.findByVersionProducto(versionProducto);
     }
 
     public Date addDays(int days) {

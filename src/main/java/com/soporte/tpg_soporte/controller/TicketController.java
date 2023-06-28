@@ -123,8 +123,8 @@ public class TicketController {
     @DeleteMapping("/tickets/{codigo}")
     public ResponseEntity<?> deleteTicket(@PathVariable String codigo) {
         try {
-            Optional<Ticket> ticket = ticketService.deleteById(codigo);
-            return ResponseEntity.status(HttpStatus.OK).body(ticket);
+            ticketService.deleteById(codigo);
+            return ResponseEntity.status(HttpStatus.OK).body("Ticket eliminado.");
         } catch(ErrorNotFound e) {
             ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -214,14 +214,8 @@ public class TicketController {
     })
     @CrossOrigin
     @GetMapping("/clientes/{cliente}/tickets")
-    public ResponseEntity<?> findTicketsByCliente(@PathVariable Long cliente) {
-        try {
-            Collection<Ticket> tickets = ticketService.findByCliente(cliente);
-            return ResponseEntity.ok(tickets);
-        } catch (ErrorNotFound e) {
-            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }   
+    public Collection<Ticket> findTicketsByCliente(@PathVariable Long cliente) {
+        return ticketService.findByCliente(cliente);
     }
 }
     

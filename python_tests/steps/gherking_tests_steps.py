@@ -100,7 +100,7 @@ def step_then_client_is_requested(context):
     context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
     response = context.response
     assert response.json() == {
-        "message": ["Client is required"]
+        "message": ["Se requiere ingresar un cliente."]
     }
 
 @then('Version is requested')
@@ -108,7 +108,7 @@ def step_then_version_is_requested(context):
     context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
     response = context.response
     assert response.json() == {
-        "message": ["Version is required"]
+        "message": ["Se requiere ingresar una versión del producto."]
     }
 
 @then('Product is requested')
@@ -116,7 +116,7 @@ def step_then_product_is_requested(context):
     context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
     response = context.response
     assert response.json() == {
-        "message": ["Title is required"]
+        "message": ["Se requiere ingresar un título."]
     }
 
 @given('Ticket with state PENDIENTE or EMPEZADO')
@@ -326,7 +326,7 @@ def step_then_ticket_should_fail_with_ticket_not_found_error(context):
     response = context.response
     assert response.status_code == 404
     assert response.json() == {
-        "message": ["Ticket not found"]
+        "message": ["El ticket no fue encontrado."]
     }
 
 @given('Ticket with state RESUELTO')
@@ -355,7 +355,7 @@ def step_then_ticket_should_fail_with_ticket_is_already_resolved_error(context):
     print(response.text)
     assert response.status_code == 404
     assert response.json() == {
-        "message": ["Closed tickets can't be updated"]
+        "message": ["Tickets resueltos no se pueden actualizar."]
     }
     #requests.delete(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')  
 
@@ -379,7 +379,7 @@ def step_when_deleting_a_ticket_with_invalid_id(context):
     response = requests.delete(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')
     context.response = response
     print(response.text)
-    assert response.status_code == 200
+    assert response.status_code == 404
 
 @given('Ticket valid id')
 def step_given_ticket_valid_id(context):

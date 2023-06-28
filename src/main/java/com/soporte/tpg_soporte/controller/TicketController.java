@@ -86,9 +86,14 @@ public class TicketController {
     })
     @CrossOrigin
     @GetMapping("/tickets/{codigo}")
-    public ResponseEntity<Ticket> getTicket(@PathVariable String codigo) {
-        Optional<Ticket> ticketOptional = ticketService.findById(codigo);
-        return ResponseEntity.of(ticketOptional);
+    public ResponseEntity<?> getTicket(@PathVariable String codigo) {
+        try {
+            Optional<Ticket> opTicket = ticketService.findById(codigo);
+            return ResponseEntity.status(HttpStatus.OK).body(opTicket);
+        } catch (ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
 
@@ -111,13 +116,19 @@ public class TicketController {
 
     @Operation(summary = "Elimina un ticket en base a su código", description = "Elimina un ticket en base a su código")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Eliminación exitosa del ticket"),
+        @ApiResponse(responseCode = "200", description = "Eliminación exitosa del ticket"),
         @ApiResponse(responseCode = "404", description = "Ticket no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
      })
     @CrossOrigin
     @DeleteMapping("/tickets/{codigo}")
-    public void deleteTicket(@PathVariable String codigo) {
-        ticketService.deleteById(codigo);
+    public ResponseEntity<?> deleteTicket(@PathVariable String codigo) {
+        try {
+            Optional<Ticket> ticket = ticketService.deleteById(codigo);
+            return ResponseEntity.status(HttpStatus.OK).body(ticket);
+        } catch(ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
 
@@ -162,8 +173,14 @@ public class TicketController {
     })
     @CrossOrigin
     @GetMapping("/versiones/{codigoVersion}/tickets")
-    public Collection<Ticket> findTicketsByVersionProducto(@PathVariable Long codigoVersion) {
-        return ticketService.findByVersionProducto(codigoVersion);
+    public ResponseEntity<?> findTicketsByVersionProducto(@PathVariable Long codigoVersion) {
+        try {
+            Collection<Ticket> tickets = ticketService.findByVersionProducto(codigoVersion);
+            return ResponseEntity.ok(tickets);
+        } catch (ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
 
@@ -197,8 +214,14 @@ public class TicketController {
     })
     @CrossOrigin
     @GetMapping("/clientes/{cliente}/tickets")
-    public Collection<Ticket> findTicketsByCliente(@PathVariable Long cliente) {
-        return ticketService.findByCliente(cliente);
+    public ResponseEntity<?> findTicketsByCliente(@PathVariable Long cliente) {
+        try {
+            Collection<Ticket> tickets = ticketService.findByCliente(cliente);
+            return ResponseEntity.ok(tickets);
+        } catch (ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }   
     }
-
 }
+    

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import com.soporte.tpg_soporte.exception.ErrorNotFound;
@@ -55,12 +56,21 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public void deleteById(String id) {
+    public Optional<Ticket> deleteById(String id) {
+        Optional<Ticket> opTicket = ticketRepository.findById(id);
+        if (!opTicket.isPresent()) {
+            throw new ErrorNotFound("Ticket not found");
+        }
         ticketRepository.deleteById(id);
+        return opTicket;
     }
 
     public Optional<Ticket> findById(String id) {
-        return ticketRepository.findById(id);
+        Optional<Ticket> opTicket = ticketRepository.findById(id);
+        if (!opTicket.isPresent()) {
+            throw new ErrorNotFound("Ticket not found");
+        }
+        return opTicket;
     }
 
     public Ticket setPriority(String id, Ticket.Prioridad priority) {
@@ -107,11 +117,19 @@ public class TicketService {
     }
 
     public Collection<Ticket> findByCliente(Long cliente) {
-        return ticketRepository.findByCliente(cliente);
+        List<Ticket> ticketList = ticketRepository.findByCliente(cliente);
+        if (ticketList.isEmpty()) {
+            throw new ErrorNotFound("Cliente no encontrado");
+        }
+        return ticketList;
     }
 
     public Collection<Ticket> findByVersionProducto(Long versionProducto) {
-        return ticketRepository.findByVersionProducto(versionProducto);
+        List<Ticket> ticketList = ticketRepository.findByVersionProducto(versionProducto);
+        if (ticketList.isEmpty()) {
+            throw new ErrorNotFound("Version no encontrada");
+        }
+        return ticketList;
     }
 
     public Date addDays(int days) {

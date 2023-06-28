@@ -1,6 +1,6 @@
 import requests
 from behave import given, when, then
-from pymongo import MongoClient
+from behave import fixture, use_fixture
 
 @given('Product, version, and client')
 def step_given_product_version_and_client(context):
@@ -357,4 +357,76 @@ def step_then_ticket_should_fail_with_ticket_is_already_resolved_error(context):
     assert response.json() == {
         "message": ["Closed tickets can't be updated"]
     }
+    #requests.delete(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')  
 
+
+@when ('Delete the ticket')
+def step_when_deleting_the_ticket(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = requests.delete(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')
+    context.response = response
+
+@then('Ticket is deleted')
+def step_then_ticket_is_deleted(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = context.response
+    print(response.text)
+    assert response.status_code == 200
+
+@then('Ticket is not deleted')
+def step_when_deleting_a_ticket_with_invalid_id(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = requests.delete(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')
+    context.response = response
+    print(response.text)
+    assert response.status_code == 200
+
+@given('Ticket valid id')
+def step_given_ticket_valid_id(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    context.ticket_id = '16'
+
+@given('Ticket invalid id')
+def step_given_ticket_invalid_id(context):  
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    context.ticket_id = 'InvalidId'
+
+@when('Getting ticket information by ticket ID')
+def step_when_getting_ticket_information(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = requests.get(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')
+    context.response = response
+
+@given('Ticket valid client ID')
+def step_given_ticket_valid_client_id(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    context.client_id = 1
+
+@given('Ticket invalid client ID')
+def step_given_ticket_invalid_client_id(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    context.client_id = 55
+
+@when('Getting ticket information by client ID')
+def step_when_getting_ticket_information_by_client_id(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = requests.get(f'{context.base_url}/clientes/{context.client_id}/tickets')
+    context.response = response
+
+@then('Ticket information is returned')
+def step_then_ticket_information_is_returned(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = context.response
+    assert response.status_code == 200
+
+@then('Ticket information is not returned')
+def step_then_ticket_information_is_not_returned(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = context.response
+    print(response.text)
+    assert response.status_code == 404
+ 
+# Esto deberia eliminar el ticket creado durante el test, pero no funciona, así que lo hago en el último test
+#def after_all(context):
+#    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+#    requests.delete(f'{context.base_url}/tickets/{context.ticket_id}?codigo={context.ticket_id}')    

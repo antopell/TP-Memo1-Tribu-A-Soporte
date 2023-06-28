@@ -10,7 +10,7 @@
         "args": [
           "features"
         ],
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/python_tests"
       }
     ]
   }

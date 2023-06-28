@@ -426,6 +426,31 @@ def step_then_ticket_information_is_not_returned(context):
     print(response.text)
     assert response.status_code == 404
  
+@then(u'Ticket information is empty') 
+def step_then_ticket_information_is_empty(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = context.response
+    print(response.text)
+    assert response.status_code == 200
+    assert response.json() == []
+
+@when('Getting ticket information by products version')
+def step_when_getting_ticket_information_by_product_version(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    response = requests.get(f'{context.base_url}/versiones/{context.version}/tickets')
+    context.response = response
+
+@given('Ticket valid products version')
+def step_given_ticket_valid_product_version(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    context.version = 1
+
+@given('Ticket invalid products version')
+def step_given_ticket_invalid_product_version(context):
+    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'
+    context.version = 55
+
+
 # Esto deberia eliminar el ticket creado durante el test, pero no funciona, así que lo hago en el último test
 #def after_all(context):
 #    context.base_url = 'https://tp-memo1-tribu-a-soporte.onrender.com'

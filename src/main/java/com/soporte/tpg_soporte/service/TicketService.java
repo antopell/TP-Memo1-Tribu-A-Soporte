@@ -21,11 +21,11 @@ public class TicketService {
 
     public Ticket createTicket(Ticket ticket) {
         if (ticket.getCliente() == null) {
-            throw new ErrorNotFound("Client is required");
+            throw new ErrorNotFound("Se requiere ingresar un cliente.");
         } else if (ticket.getTitulo() == null) {
-            throw new ErrorNotFound("Title is required");
+            throw new ErrorNotFound("Se requiere ingresar un título.");
         } else if (ticket.getVersionProducto() == null) {
-            throw new ErrorNotFound("Version is required");
+            throw new ErrorNotFound("Se requiere ingresar una versión del producto.");
         }
         Date date;
         switch (ticket.getSeveridad()) {
@@ -59,7 +59,7 @@ public class TicketService {
     public Optional<Ticket> deleteById(String id) {
         Optional<Ticket> opTicket = ticketRepository.findById(id);
         if (!opTicket.isPresent()) {
-            throw new ErrorNotFound("Ticket not found");
+            throw new ErrorNotFound("El ticket no fue encontrado.");
         }
         ticketRepository.deleteById(id);
         return opTicket;
@@ -68,7 +68,7 @@ public class TicketService {
     public Optional<Ticket> findById(String id) {
         Optional<Ticket> opTicket = ticketRepository.findById(id);
         if (!opTicket.isPresent()) {
-            throw new ErrorNotFound("Ticket not found");
+            throw new ErrorNotFound("El ticket no fue encontrado.");
         }
         return opTicket;
     }
@@ -85,11 +85,11 @@ public class TicketService {
     public Ticket updateTicket(String id, Ticket ticket) {
         Optional<Ticket> opTicket = ticketRepository.findById(id);
         if (!opTicket.isPresent()) {
-            throw new ErrorNotFound("Ticket not found");
+            throw new ErrorNotFound("El ticket no fue encontrado.");
         }
         Ticket existingTicket = opTicket.get();
         if (existingTicket.getEstado() == Ticket.Estado.RESUELTO) {
-            throw new ErrorNotFound("Closed tickets can't be updated");
+            throw new ErrorNotFound("Tickets resueltos no se pueden actualizar.");
         }
         existingTicket.setCodigo(ticket.getCodigo());
         existingTicket.setTitulo(ticket.getTitulo());
@@ -119,7 +119,7 @@ public class TicketService {
     public Collection<Ticket> findByCliente(Long cliente) {
         List<Ticket> ticketList = ticketRepository.findByCliente(cliente);
         if (ticketList.isEmpty()) {
-            throw new ErrorNotFound("Cliente no encontrado");
+            throw new ErrorNotFound("Cliente no encontrado.");
         }
         return ticketList;
     }
@@ -127,7 +127,7 @@ public class TicketService {
     public Collection<Ticket> findByVersionProducto(Long versionProducto) {
         List<Ticket> ticketList = ticketRepository.findByVersionProducto(versionProducto);
         if (ticketList.isEmpty()) {
-            throw new ErrorNotFound("Version no encontrada");
+            throw new ErrorNotFound("Versión no encontrada.");
         }
         return ticketList;
     }

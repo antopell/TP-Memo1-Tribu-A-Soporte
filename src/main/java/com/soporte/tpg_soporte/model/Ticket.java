@@ -1,5 +1,6 @@
 package com.soporte.tpg_soporte.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class Ticket {
         this.fechaCreacion = fechaCreacion;
         this.cliente = cliente;
         this.versionProducto = versionProducto;
+        if (tareas == null) tareas = new ArrayList<Tarea>();
         this.tareas = tareas;
     }
 

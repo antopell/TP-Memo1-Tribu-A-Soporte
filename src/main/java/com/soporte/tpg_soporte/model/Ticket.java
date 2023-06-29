@@ -1,6 +1,7 @@
 package com.soporte.tpg_soporte.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,10 +25,12 @@ public class Ticket {
     private Date fechaCreacion;
     private Long cliente;
     private Long versionProducto;
+    private List<Tarea> tareas;
 
 
     public Ticket(String codigo, String titulo, Severidad severidad, Prioridad prioridad, 
-                    Estado estado, String description, Date fechaLimite, Date fechaCreacion, Long cliente, Long versionProducto) {
+                    Estado estado, String description, Date fechaLimite, Date fechaCreacion, Long cliente, Long versionProducto,
+                    List<Tarea> tareas) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.severidad = severidad;
@@ -38,6 +41,7 @@ public class Ticket {
         this.fechaCreacion = fechaCreacion;
         this.cliente = cliente;
         this.versionProducto = versionProducto;
+        this.tareas = tareas;
     }
 
 
@@ -48,7 +52,6 @@ public class Ticket {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
 
     public String getTitulo() {
         return this.titulo;
@@ -120,6 +123,14 @@ public class Ticket {
 
     public void setVersionProducto(Long versionProducto) {
         this.versionProducto = versionProducto;
+    }
+
+    public List<Tarea> getTareas() {
+        return this.tareas;
+    }
+
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
     }
     
 

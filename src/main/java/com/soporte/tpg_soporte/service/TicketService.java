@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import com.soporte.tpg_soporte.exception.ErrorNotFound;
@@ -100,7 +99,23 @@ public class TicketService {
         existingTicket.setSeveridad(ticket.getSeveridad());
         existingTicket.setFechaCreacion(ticket.getFechaCreacion());
         existingTicket.setVersionProducto(ticket.getVersionProducto());
+        existingTicket.setTareas(ticket.getTareas());
         ticketRepository.deleteById(id);
+        ticketRepository.save(existingTicket);
+        return existingTicket;
+    }
+
+    public Ticket updateTareasTicket(String codigo, Ticket ticket) {
+        Optional<Ticket> opTicket = ticketRepository.findById(codigo);
+        if (!opTicket.isPresent()) {
+            throw new ErrorNotFound("El ticket no fue encontrado.");
+        }
+        Ticket existingTicket = opTicket.get();
+        if (existingTicket.getEstado() == Ticket.Estado.RESUELTO) {
+            throw new ErrorNotFound("Tickets resueltos no se pueden actualizar.");
+        }
+        existingTicket.setTareas(ticket.getTareas());
+        ticketRepository.deleteById(codigo);
         ticketRepository.save(existingTicket);
         return existingTicket;
     }

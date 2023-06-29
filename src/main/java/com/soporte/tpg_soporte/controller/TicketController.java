@@ -114,6 +114,23 @@ public class TicketController {
         }
     }
 
+    @Operation(summary = "Actualiza las tareas de un ticket en base a su código", description = "Actualizalas tareas de un ticket en base a su código")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Actualización exitosa del ticket"),
+        @ApiResponse(responseCode = "404", description = "Ticket no existe", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+     })
+    @CrossOrigin
+    @PutMapping("/tickets/{codigo}/tareas")
+    public ResponseEntity<?> updateTareasTicket(@RequestBody Ticket ticket, @PathVariable String codigo) {
+        try {
+            Ticket ticket_updated = ticketService.updateTareasTicket(codigo, ticket);
+            return ResponseEntity.status(HttpStatus.OK).body(ticket_updated);
+        } catch(ErrorNotFound e) {
+            ErrorResponse errorResponse = new ErrorResponse(Collections.singletonList(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
     @Operation(summary = "Elimina un ticket en base a su código", description = "Elimina un ticket en base a su código")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Eliminación exitosa del ticket"),

@@ -104,7 +104,7 @@ public class TicketController {
      })
     @CrossOrigin
     @PutMapping("/tickets/{codigo}")
-    public ResponseEntity<?> updateTicket(@RequestBody Ticket ticket, @RequestParam String codigo) {
+    public ResponseEntity<?> updateTicket(@RequestBody Ticket ticket, @PathVariable String codigo) {
         try {
             Ticket ticket_updated = ticketService.updateTicket(codigo, ticket);
             return ResponseEntity.status(HttpStatus.OK).body(ticket_updated);
